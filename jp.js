@@ -10,6 +10,8 @@ for (let i = 0; i < collisions.length; i += 50) {
 }
 
 class Boundary {
+    static width = 48
+    static height = 48
     constructor(position){
         this.position = position 
         this.width = 48
@@ -18,19 +20,32 @@ class Boundary {
 
     draw(){
         c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, this.width.toFixed, this.height)
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 
 }
 
 const boundaries = []
 
-collisionsMap.forEach(row => {
-    row.forEach(symbol => {
-        console.log(symbol);
+const offset = {
+    x: -115,
+    y: -1350
+}
+
+collisionsMap.forEach((row, i) => {
+    row.forEach((symbol, j) => {
+        if (symbol === 1025)
+        boundaries.push(
+            new Boundary({
+                position: {
+                    x:j*Boundary.width+offset.x,
+                    y:i*Boundary.height+offset.y
+                }
+            })
+        )
     })
 })
-
+console.log(boundaries)
 
 
 //canvas.width = 1024
@@ -46,43 +61,104 @@ const imJogador =new Image()
 imJogador.src = 'playerDown.png'
 
 class Sprite {
-    constructor({posicao, velocidade, image}){
-        this.posicao = posicao
+    constructor({position, velocidade, image}){
+        this.position = position
         this.image = image
     }
 
     draw(){
-        c.drawImage(this.image, this.posicao.x, this.posicao.y)
+        c.drawImage(this.image, this.position.x, this.position.y)
     }
 }
 
 const fundo = new Sprite({
-    posicao: {
-        x:-115,
-        y: -1350
+    position: {
+        x:offset.x,
+        y:offset.y
     },
     image: image
 })
 
-const chaves = {
+const keys = {
     w: {
-        clicando: false
+        pressed: false
     },
     a: {
-        clicanda: false
+        pressed: false
     },
     s: {
-        clicanda: false
+        pressed: false
     },
 
     d: {
-        clicanda: false
+        pressed: false
     }
 }
 
+let lastKey = ''
+
+window.addEventListener('keydown', (e) => {
+    switch (e.key){
+        case 'w':
+            keys.w.pressed = true
+            lastKey = 'w'
+        break
+
+        case 's':
+            keys.s.pressed = true
+            lastKey = 's'
+        break
+
+        case 'a':
+            keys.a.pressed = true
+            lastKey = 'a'
+        break
+
+        case 'd':
+            keys.d.pressed = true
+            lastKey = 'd'
+        break
+
+    }
+})
+
+window.addEventListener('keyup', (e) => {
+    switch (e.key){
+        case 'w':
+            keys.w.pressed = false
+        break
+
+        case 's':
+            keys.s.pressed = false
+        break
+
+        case 'a':
+            keys.a.pressed = false
+        break
+
+        case 'd':
+            keys.d.pressed = false
+        break
+
+    }
+})
+
+
+const testBoundary = new Boundary({
+    position: {
+        x: 400,
+        y: 400
+    }
+})
+
+const movables = [fundo, testBoundary]
 function animate() {
     window.requestAnimationFrame(animate)
     fundo.draw()
+//    boundaries.forEach(Boundary => {
+//        Boundary.draw()
+//    })
+    testBoundary.draw()
     c.drawImage(
         imJogador,
         0,
@@ -95,14 +171,23 @@ function animate() {
         imJogador.height
     )
 
-    if(chaves.w.clicando && ultimaChave === 'w') 
-    {fundo.posicao.y += 3
-        collisionsMap.posicao.y += 3
+    if(keys.w.pressed && lastKey === 'w') {
+        movables.forEach((movable) => {
+            movable.position.y += 3
+        })
+    }else if (keys.a.pressed && lastKey === 'a') {
+        movables.forEach((movable) => {
+            movable.position.x += 3
+        })
+    }else if (keys.d.pressed && lastKey === 'd') {
+        movables.forEach((movable) => {
+            movable.position.x -= 3
+        })
+    }else if (keys.s.pressed && lastKey === 's') {
+        movables.forEach((movable) => {
+            movable.position.y -= 3
+        })
     }
-    else if (chaves.a.clicando && ultimaChave === 'a') fundo.posicao.x += 3
-    else if (chaves.d.clicando && ultimaChave === 'd') fundo.posicao.x -= 3
-    else if (chaves.s.clicando && ultimaChave === 's') fundo.posicao.y -= 3
-
 }
 
 animate()
@@ -123,50 +208,3 @@ image.onload = () => {
 
 }
 
-let ultimaChave = ''
-
-window.addEventListener('keydown', (e) => {
-    switch (e.key){
-        case 'w':
-            chaves.w.clicando = true
-            ultimaChave = 'w'
-        break
-
-        case 's':
-            chaves.s.clicando = true
-            ultimaChave = 's'
-        break
-
-        case 'a':
-            chaves.a.clicando = true
-            ultimaChave = 'a'
-        break
-
-        case 'd':
-            chaves.d.clicando = true
-            ultimaChave = 'd'
-        break
-
-    }
-})
-
-window.addEventListener('keyup', (e) => {
-    switch (e.key){
-        case 'w':
-            chaves.w.clicando = false
-        break
-
-        case 's':
-            chaves.s.clicando = false
-        break
-
-        case 'a':
-            chaves.a.clicando = false
-        break
-
-        case 'd':
-            chaves.d.clicando = false
-        break
-
-    }
-})
