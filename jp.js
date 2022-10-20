@@ -1,10 +1,40 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-console.log(collisions)
-
 canvas.width = 1024
 canvas.height = 576
+
+const collisionsMap = []
+for (let i = 0; i < collisions.length; i += 50) {
+  collisionsMap.push(collisions.slice(i, 50 + i))
+}
+
+class Boundary {
+    constructor(position){
+        this.position = position 
+        this.width = 48
+        this.height = 48 
+    }
+
+    draw(){
+        c.fillStyle = 'red'
+        c.fillRect(this.position.x, this.position.y, this.width.toFixed, this.height)
+    }
+
+}
+
+const boundaries = []
+
+collisionsMap.forEach(row => {
+    row.forEach(symbol => {
+        console.log(symbol);
+    })
+})
+
+
+
+//canvas.width = 1024
+//canvas.height = 576
 
 c.fillStyle = 'white'
 c.fillRect(0,0,canvas.width, canvas.height)
@@ -67,7 +97,7 @@ function animate() {
 
     if(chaves.w.clicando && ultimaChave === 'w') 
     {fundo.posicao.y += 3
-        limite.posicao.y += 3
+        collisionsMap.posicao.y += 3
     }
     else if (chaves.a.clicando && ultimaChave === 'a') fundo.posicao.x += 3
     else if (chaves.d.clicando && ultimaChave === 'd') fundo.posicao.x -= 3
