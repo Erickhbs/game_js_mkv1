@@ -1,6 +1,8 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
+console.log(collisions);
+
 canvas.width = 1024
 canvas.height = 576
 
@@ -27,14 +29,15 @@ class Boundary {
 
 const boundaries = []
 
-const offset = {
-    x: -115,
-    y: -1350
-}
+//collisionsMap.forEach((row) => {
+//    row.forEach((symbol) => {
+//        console.log(symbol)
+//    })
+//})
 
 collisionsMap.forEach((row, i) => {
-    row.forEach((Symbol, j) => {
-        if (Symbol === 1025)
+    row.forEach((symbol, j) => {
+        if (symbol === 1025)
         boundaries.push(
             new Boundary({
                 position: {
@@ -46,18 +49,25 @@ collisionsMap.forEach((row, i) => {
     })
 })
 
-
-//canvas.width = 1024
-//canvas.height = 576
-
-/*c.fillStyle = 'white'
-//c.fillRect(0,0,canvas.width, canvas.height)*/
+console.log(boundaries)
 
 const image = new Image()
 image.src = 'seli.png'
 
 const playerImage =new Image()
 playerImage.src = 'playerDown.png'
+
+
+const offset = {
+    x: -115,
+    y: -1350
+}
+
+//canvas.width = 1024
+//canvas.height = 576
+
+/*c.fillStyle = 'white'
+//c.fillRect(0,0,canvas.width, canvas.height)*/
 
 class Sprite {
     constructor({position, velocity, image, frames = {max: 1} }){
