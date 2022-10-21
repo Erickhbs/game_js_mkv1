@@ -1,8 +1,6 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-console.log(collisions);
-
 canvas.width = 1024
 canvas.height = 576
 
@@ -29,11 +27,10 @@ class Boundary {
 
 const boundaries = []
 
-//collisionsMap.forEach((row) => {
-//    row.forEach((symbol) => {
-//        console.log(symbol)
-//    })
-//})
+const offset = {
+    x: -115,
+    y: -1350
+}
 
 collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
@@ -57,11 +54,6 @@ image.src = 'seli.png'
 const playerImage =new Image()
 playerImage.src = 'playerDown.png'
 
-
-const offset = {
-    x: -115,
-    y: -1350
-}
 
 //canvas.width = 1024
 //canvas.height = 576
