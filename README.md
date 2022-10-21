@@ -1,5 +1,1 @@
-﻿# Integrantes
-Erick Barros
-Phelyppe Álex
-Allan
-Tiago
+# Criação de um joguinho utilizando apenas javascript e html
